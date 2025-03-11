@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	initializeBackToTopButton();
 	initializeAnimations();
 	initializeLazyLoading();
+	initializeSearchForm(); // Added search form initialization
 });
 
 /**
@@ -33,6 +34,31 @@ function initializeHeaderScrollEffect() {
 
 		lastScrollPosition = currentScrollPosition;
 	});
+}
+
+/**
+ * Initialize search form functionality
+ */
+function initializeSearchForm() {
+	const searchForm = document.querySelector(".search-container form");
+	if (searchForm) {
+		// Remove any existing event listeners to prevent duplication
+		const newSearchForm = searchForm.cloneNode(true);
+		searchForm.parentNode.replaceChild(newSearchForm, searchForm);
+
+		newSearchForm.addEventListener("submit", function (event) {
+			event.preventDefault(); // Prevent default form submission
+
+			const searchInput = this.querySelector('input[type="text"]');
+			const searchTerm = searchInput.value.trim();
+
+			if (searchTerm) {
+				console.log("Searching for:", searchTerm);
+				alert("You searched for: " + searchTerm);
+				searchInput.value = ""; // Clear the search field
+			}
+		});
+	}
 }
 
 /**
@@ -290,6 +316,9 @@ function initializeFormValidation() {
 	const forms = document.querySelectorAll("form");
 
 	forms.forEach((form) => {
+		// Skip search form since it's handled separately
+		if (form.closest(".search-container")) return;
+
 		form.addEventListener("submit", (e) => {
 			// Förhindra standardbeteende för demo
 			e.preventDefault();
