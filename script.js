@@ -492,7 +492,9 @@ function initializeMobileMenu() {
  */
 function initializeAnimations() {
 	const animateOnScroll = () => {
-		const elements = document.querySelectorAll(".article, .newsletter-card");
+		const elements = document.querySelectorAll(
+			".article, .newsletter-card, .footer-content > div"
+		);
 		const triggerBottom = window.innerHeight * 0.8;
 
 		elements.forEach((element) => {
@@ -509,11 +511,13 @@ function initializeAnimations() {
 	};
 
 	// Sätt ursprungliga stilar
-	document.querySelectorAll(".article, .newsletter-card").forEach((element) => {
-		element.style.transition = "opacity 0.5s ease, transform 0.5s ease";
-		element.style.opacity = "0";
-		element.style.transform = "translateY(20px)";
-	});
+	document
+		.querySelectorAll(".article, .newsletter-card, .footer-content > div")
+		.forEach((element) => {
+			element.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+			element.style.opacity = "0";
+			element.style.transform = "translateY(20px)";
+		});
 
 	// Kontrollera element vid skroll
 	window.addEventListener("scroll", animateOnScroll);
@@ -554,3 +558,22 @@ function initializeLazyLoading() {
 
 		lazyImages.forEach((image) => {
 			observer.observe(image);
+		});
+	} else {
+		// Fallback för äldre browsrar
+		const lazyLoadFallback = () => {
+			lazyImages.forEach((image) => {
+				if (image.getBoundingClientRect().top < window.innerHeight) {
+					lazyLoad(image);
+				}
+			});
+		};
+
+		window.addEventListener("scroll", lazyLoadFallback);
+		window.addEventListener("resize", lazyLoadFallback);
+		window.addEventListener("orientationchange", lazyLoadFallback);
+
+		// Initial kontroll
+		lazyLoadFallback();
+	}
+}
