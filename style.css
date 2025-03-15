@@ -1,4 +1,3 @@
-/* Modern, stilren design */
 :root {
 	/* Ny färgpalett */
 	--color-primary: #2563eb;
@@ -765,6 +764,7 @@ button svg {
 
 .modal-body {
 	padding: var(--spacing-lg);
+	color: black;
 }
 
 .modal-footer {

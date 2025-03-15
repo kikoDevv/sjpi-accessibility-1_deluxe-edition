@@ -13,10 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	initializeLazyLoading();
 	initializeSearchForm(); // Added search form initialization
 });
-
-/**
- * Lägger till scrolleffekt för header
- */
 function initializeHeaderScrollEffect() {
 	const header = document.querySelector("header");
 	if (!header) return;
@@ -54,7 +50,6 @@ function initializeSearchForm() {
 
 			if (searchTerm) {
 				console.log("Searching for:", searchTerm);
-				alert("You searched for: " + searchTerm);
 				searchInput.value = ""; // Clear the search field
 			}
 		});
