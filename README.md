@@ -62,5 +62,4 @@ Thoroughly tested with:
 - Keyboard-only navigation
 
 ## License
-
-MIT License
+KikoDevv
