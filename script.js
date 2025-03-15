@@ -1,4 +1,4 @@
-// Modern och tillgänglig JavaScript
+//---------Modern och tillgänglig JavaScript----------
 
 document.addEventListener("DOMContentLoaded", function () {
 	// Initialisera huvudfunktioner
@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	initializeLazyLoading();
 	initializeSearchForm(); // Added search form initialization
 });
+
+/**
+ * Lägger till scrolleffekt för header
+ */
 function initializeHeaderScrollEffect() {
 	const header = document.querySelector("header");
 	if (!header) return;
@@ -50,7 +54,8 @@ function initializeSearchForm() {
 
 			if (searchTerm) {
 				console.log("Searching for:", searchTerm);
-				searchInput.value = ""; // Clear the search field
+				alert("You searched for: " + searchTerm);
+				searchInput.value = "";
 			}
 		});
 	}
@@ -65,13 +70,11 @@ function initializeAnnouncement() {
 
 	if (!announcement || !closeButton) return;
 
-	// Visa annonsen med fördröjning för bättre användarupplevelse
 	setTimeout(() => {
 		announcement.classList.add("visible");
 		announceToScreenReader("Ett nytt erbjudande finns tillgängligt");
 	}, 1500);
 
-	// Hantera stängning
 	closeButton.addEventListener("click", () => closeAnnouncement(announcement));
 	closeButton.addEventListener("keydown", (e) => {
 		if (e.key === "Enter" || e.key === " ") {
@@ -80,7 +83,6 @@ function initializeAnnouncement() {
 		}
 	});
 
-	// Kontrollera tidigare preferens
 	if (localStorage.getItem("announcementClosed") === "true") {
 		announcement.style.display = "none";
 	}
@@ -106,12 +108,10 @@ function initializeInteractiveImages() {
 	const articleImages = document.querySelectorAll(".image-container img");
 
 	articleImages.forEach((img) => {
-		// Gör bilderna fokuserbara och interaktiva
 		img.setAttribute("tabindex", "0");
 		img.setAttribute("role", "button");
 		img.setAttribute("aria-label", `Visa mer information om ${img.alt}`);
 
-		// Förbättrad händelsehantering
 		const handleImageInteraction = () => handleImageClick(img);
 
 		img.addEventListener("click", handleImageInteraction);
@@ -131,8 +131,6 @@ function handleImageClick(img) {
 	const imageTitle = img.alt;
 	const imageSrc = img.src;
 
-	// I en fullständig implementation skulle detta visa en modern lightbox
-	// För denna demonstration använder vi en förbättrad alert
 	showModal({
 		title: imageTitle,
 		image: imageSrc,
@@ -150,7 +148,6 @@ function showModal(options = {}) {
 		existingModal.remove();
 	}
 
-	// Skapa modal-element
 	const modal = document.createElement("div");
 	modal.id = "image-modal";
 	modal.className = "modal";
@@ -158,7 +155,6 @@ function showModal(options = {}) {
 	modal.setAttribute("aria-modal", "true");
 	modal.setAttribute("aria-labelledby", "modal-title");
 
-	// Skapa innehåll
 	modal.innerHTML = `
     <div class="modal-content">
       <div class="modal-header">
@@ -179,10 +175,8 @@ function showModal(options = {}) {
     </div>
   `;
 
-	// Lägg till modal i DOM
 	document.body.appendChild(modal);
 
-	// Lägg till styling
 	const style = document.createElement("style");
 	style.textContent = `
     .modal {
@@ -250,12 +244,10 @@ function showModal(options = {}) {
   `;
 	document.head.appendChild(style);
 
-	// Visa modal
 	setTimeout(() => {
 		modal.classList.add("show");
 	}, 10);
 
-	// Hantera stängning
 	const closeModal = () => {
 		modal.classList.remove("show");
 		setTimeout(() => {
@@ -284,7 +276,6 @@ function initializeExpandableContent() {
 		const content = button.nextElementSibling;
 		if (!content || !content.classList.contains("expanded-content")) return;
 
-		// Sätt initialt tillstånd
 		content.hidden = true;
 		button.setAttribute("aria-expanded", "false");
 
@@ -293,12 +284,10 @@ function initializeExpandableContent() {
 			button.setAttribute("aria-expanded", !expanded);
 			content.hidden = expanded;
 
-			// Ändra knapptexten baserat på tillstånd
 			const buttonText = expanded ? "Visa mer information" : "Dölj information";
 			button.innerHTML =
 				buttonText + '<span class="visually-hidden"> om nyårsfirandet</span>';
 
-			// Meddela skärmläsare
 			announceToScreenReader(expanded ? "Innehåll dolt" : "Mer innehåll visas");
 		});
 	});
@@ -311,14 +300,11 @@ function initializeFormValidation() {
 	const forms = document.querySelectorAll("form");
 
 	forms.forEach((form) => {
-		// Skip search form since it's handled separately
 		if (form.closest(".search-container")) return;
 
 		form.addEventListener("submit", (e) => {
-			// Förhindra standardbeteende för demo
 			e.preventDefault();
 
-			// Validera alla obligatoriska fält
 			const requiredFields = form.querySelectorAll('[aria-required="true"]');
 			let hasError = false;
 
@@ -332,7 +318,6 @@ function initializeFormValidation() {
 			});
 
 			if (!hasError) {
-				// Simulerad inlämning - i verkligheten skulle detta skicka formuläret
 				announceToScreenReader("Formuläret har skickats");
 				showFormSuccess(form);
 			}
@@ -344,10 +329,8 @@ function initializeFormValidation() {
  * Visar ett felmeddelande för ett fält
  */
 function showFieldError(field) {
-	// Ta bort eventuellt befintligt felmeddelande
 	clearFieldError(field);
 
-	// Skapa ett felmeddelande
 	const errorId = `error-${
 		field.id || Math.random().toString(36).substring(2, 9)
 	}`;
@@ -356,14 +339,11 @@ function showFieldError(field) {
 	errorMessage.className = "field-error";
 	errorMessage.textContent = "Detta fält är obligatoriskt";
 
-	// Koppla samman fält och felmeddelande med aria
 	field.setAttribute("aria-invalid", "true");
 	field.setAttribute("aria-describedby", errorId);
 
-	// Lägg till felmeddelande efter fältet
 	field.parentNode.insertBefore(errorMessage, field.nextSibling);
 
-	// Fokusera fältet
 	field.focus();
 }
 
@@ -387,17 +367,14 @@ function clearFieldError(field) {
  * Visar en bekräftelse på att formuläret har skickats
  */
 function showFormSuccess(form) {
-	// Skapa ett success-meddelande
 	const successMessage = document.createElement("div");
 	successMessage.className = "form-success";
 	successMessage.setAttribute("role", "alert");
 	successMessage.textContent = "Tack! Din information har tagits emot.";
 
-	// Lägg till bekräftelse och rensa formuläret
 	form.insertAdjacentElement("beforeend", successMessage);
 	form.reset();
 
-	// Ta bort bekräftelsen efter en stund
 	setTimeout(() => {
 		successMessage.remove();
 	}, 5000);
@@ -407,7 +384,6 @@ function showFormSuccess(form) {
  * Meddelar skärmläsare om viktiga händelser
  */
 function announceToScreenReader(message) {
-	// Skapa eller uppdatera ett live-region-element för skärmläsare
 	let announcer = document.getElementById("sr-announcer");
 
 	if (!announcer) {
@@ -419,10 +395,8 @@ function announceToScreenReader(message) {
 		document.body.appendChild(announcer);
 	}
 
-	// Lägg till meddelandet
 	announcer.textContent = message;
 
-	// Rensa meddelandet efter en stund för att undvika upprepningar
 	setTimeout(() => {
 		announcer.textContent = "";
 	}, 3000);
@@ -444,13 +418,10 @@ function initializeBackToTopButton() {
 		}
 	};
 
-	// Initial kontroll
 	showBackToTop();
 
-	// Kontrollera vid scroll
 	window.addEventListener("scroll", showBackToTop);
 
-	// Mjuk scroll till toppen
 	backToTop.addEventListener("click", (e) => {
 		e.preventDefault();
 		window.scrollTo({
@@ -474,16 +445,13 @@ function initializeMobileMenu() {
 		menuToggle.setAttribute("aria-expanded", !expanded);
 		navigation.classList.toggle("expanded");
 
-		// Animera hamburgermenyn till ett X eller tillbaka
 		const bars = menuToggle.querySelectorAll(".menu-toggle-bar");
 		if (bars.length >= 3) {
 			if (!expanded) {
-				// Konvertera till X
 				bars[0].style.transform = "rotate(45deg) translate(5px, 5px)";
 				bars[1].style.opacity = "0";
 				bars[2].style.transform = "rotate(-45deg) translate(5px, -5px)";
 			} else {
-				// Återställ till hamburger
 				bars[0].style.transform = "none";
 				bars[1].style.opacity = "1";
 				bars[2].style.transform = "none";
@@ -491,7 +459,6 @@ function initializeMobileMenu() {
 		}
 	});
 
-	// Stäng menyn när en länk klickas
 	const navLinks = navigation.querySelectorAll("a");
 	navLinks.forEach((link) => {
 		link.addEventListener("click", () => {
@@ -499,7 +466,6 @@ function initializeMobileMenu() {
 				menuToggle.setAttribute("aria-expanded", "false");
 				navigation.classList.remove("expanded");
 
-				// Återställ hamburgermenyn
 				const bars = menuToggle.querySelectorAll(".menu-toggle-bar");
 				if (bars.length >= 3) {
 					bars[0].style.transform = "none";
@@ -534,7 +500,6 @@ function initializeAnimations() {
 		});
 	};
 
-	// Sätt ursprungliga stilar
 	document
 		.querySelectorAll(".article, .newsletter-card, .footer-content > div")
 		.forEach((element) => {
@@ -543,10 +508,8 @@ function initializeAnimations() {
 			element.style.transform = "translateY(20px)";
 		});
 
-	// Kontrollera element vid skroll
 	window.addEventListener("scroll", animateOnScroll);
 
-	// Kör en gång vid inladdning
 	animateOnScroll();
 }
 
@@ -556,11 +519,9 @@ function initializeAnimations() {
 function initializeLazyLoading() {
 	// Kontrollera om browsern redan stödjer lazy loading
 	if ("loading" in HTMLImageElement.prototype) {
-		// Browser har inbyggt stöd, inget behöver göras
 		return;
 	}
 
-	// Polyfill för browsrar som inte stödjer lazy loading
 	const lazyImages = document.querySelectorAll('img[loading="lazy"]');
 
 	const lazyLoad = (image) => {
@@ -584,7 +545,6 @@ function initializeLazyLoading() {
 			observer.observe(image);
 		});
 	} else {
-		// Fallback för äldre browsrar
 		const lazyLoadFallback = () => {
 			lazyImages.forEach((image) => {
 				if (image.getBoundingClientRect().top < window.innerHeight) {
@@ -596,8 +556,6 @@ function initializeLazyLoading() {
 		window.addEventListener("scroll", lazyLoadFallback);
 		window.addEventListener("resize", lazyLoadFallback);
 		window.addEventListener("orientationchange", lazyLoadFallback);
-
-		// Initial kontroll
 		lazyLoadFallback();
 	}
 }
