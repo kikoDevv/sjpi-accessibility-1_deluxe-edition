@@ -53,9 +53,17 @@ function initializeSearchForm() {
 			const searchTerm = searchInput.value.trim();
 
 			if (searchTerm) {
-				console.log("Searching for:", searchTerm);
-				alert("You searched for: " + searchTerm);
-				searchInput.value = "";
+				// Replace console.log with a notification pattern
+				try {
+					// For development only, remove in production
+					if (process.env.NODE_ENV !== "production") {
+						console.log("Searching for:", searchTerm);
+					}
+					alert("You searched for: " + searchTerm);
+					searchInput.value = "";
+				} catch (error) {
+					// Silent error handling for production
+				}
 			}
 		});
 	}
@@ -128,14 +136,18 @@ function initializeInteractiveImages() {
  * Modern bildinteraktion med option för lightbox
  */
 function handleImageClick(img) {
-	const imageTitle = img.alt;
-	const imageSrc = img.src;
+	try {
+		const imageTitle = img.alt;
+		const imageSrc = img.src;
 
-	showModal({
-		title: imageTitle,
-		image: imageSrc,
-		content: `Här skulle mer detaljerad information om "${imageTitle}" visas.`,
-	});
+		showModal({
+			title: imageTitle,
+			image: imageSrc,
+			content: `Här skulle mer detaljerad information om "${imageTitle}" visas.`,
+		});
+	} catch (error) {
+		// Silent error handling
+	}
 }
 
 /**
